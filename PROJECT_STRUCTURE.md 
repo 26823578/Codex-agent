@@ -1,0 +1,180 @@
+# Project Structure
+
+Complete file structure for the Personal Codex Agent project.
+
+```
+personal-codex-agent/
+│
+├── 📄 README.md                 # Main project documentation
+├── 📄 DEPLOYMENT.md            # Deployment guide
+├── 📄 PROJECT_STRUCTURE.md     # This file
+│
+├── ⚙️ requirements.txt          # Python dependencies
+├── ⚙️ .env.example              # Environment template
+├── ⚙️ .gitignore                # Git ignore rules
+│
+├── 🐳 Dockerfile                # Docker configuration
+├── 🐳 docker-compose.yml       # Docker Compose setup
+├── 🚀 run.sh                    # Local run script
+│
+├── 🎯 app.py                    # Main Streamlit application
+├── 🧪 test_agent.py            # Testing script
+│
+├── 📁 src/                      # Source code directory
+│   ├── __init__.py              # Package initialization
+│   ├── config.py                # Configuration management
+│   ├── document_processor.py   # Document handling & chunking
+│   ├── vector_store.py         # FAISS vector database
+│   └── chat_agent.py           # RAG chat agent
+│
+├── 📁 .streamlit/              # Streamlit configuration (optional)
+│   └── secrets.toml            # Streamlit Cloud secrets
+│
+├── 📁 data/                    # Data directory (optional)
+│   ├── uploads/                # Uploaded documents
+│   └── processed/              # Processed chunks
+│
+└── 📁 docs/                    # Additional documentation (optional)
+    ├── api.md                  # API documentation
+    ├── architecture.md         # System architecture
+    └── examples/               # Example documents
+```
+
+## 📄 File Descriptions
+
+### Core Application Files
+
+**`app.py`**
+- Main Streamlit application
+- UI components and user interaction
+- File upload and document processing
+- Chat interface with mode selection
+- Session state management
+
+**`src/config.py`**
+- Centralized configuration
+- Environment variable handling
+- Model and parameter settings
+- Validation logic
+
+**`src/document_processor.py`**
+- Document parsing (PDF, DOCX, TXT)
+- Text extraction and cleaning
+- Sentence-boundary aware chunking
+- Token counting and overlap handling
+- Metadata management
+
+**`src/vector_store.py`**
+- FAISS vector database interface
+- OpenAI embedding generation
+- Similarity search implementation
+- Statistics and analytics
+- Batch processing for efficiency
+
+**`src/chat_agent.py`**
+- RAG-powered conversational agent
+- Mode-specific response generation
+- Context retrieval and assembly
+- LLM prompt engineering
+- Response formatting
+
+### Configuration Files
+
+**`requirements.txt`**
+```
+streamlit==1.29.0
+openai==1.6.1
+faiss-cpu==1.7.4
+sentence-transformers==2.2.2
+pypdf2==3.0.1
+python-docx==0.8.11
+tiktoken==0.5.2
+numpy==1.24.3
+pandas==2.0.3
+python-dotenv==1.0.0
+plotly==5.17.0
+```
+
+**`.env.example`**
+```
+OPENAI_API_KEY=your_openai_api_key_here
+# OPENAI_MODEL=gpt-3.5-turbo
+# EMBEDDING_MODEL=text-embedding-3-small
+```
+
+### Deployment Files
+
+**`Dockerfile`**
+- Multi-stage Docker build
+- Python 3.9 slim base image
+- System dependency installation
+- Application setup and configuration
+
+**`docker-compose.yml`**
+- Service definition
+- Port mapping and environment
+- Health checks
+- Volume mounting for data persistence
+
+**`run.sh`**
+- Local development script
+- Environment setup
+- Virtual environment management
+- Streamlit launch with proper configuration
+
+### Testing & Validation
+
+**`test_agent.py`**
+- End-to-end system testing
+- Sample document creation
+- Component validation
+- Integration testing
+- Performance verification
+
+## 🗂️ Data Flow
+
+### Document Processing Flow
+```
+Upload → Extract → Chunk → Embed → Store
+  ↓        ↓        ↓       ↓       ↓
+Files → Text → Sentences → Vectors → FAISS
+```
+
+### Query Processing Flow
+```
+Question → Embed → Search → Retrieve → Generate → Response
+    ↓        ↓       ↓        ↓         ↓         ↓
+  Text → Vector → FAISS → Context → LLM → Answer
+```
+
+## 🔧 Component Dependencies
+
+```mermaid
+graph TD
+    A[app.py] --> B[DocumentProcessor]
+    A --> C[VectorStore]
+    A --> D[ChatAgent]
+    B --> E[Config]
+    C --> E
+    D --> C
+    D --> E
+    C --> F[OpenAI API]
+    D --> F
+    B --> G[File Parsers]
+    G --> H[PyPDF2]
+    G --> I[python-docx]
+    C --> J[FAISS]
+    A --> K[Streamlit]
+```
+
+## 📊 Memory Usage
+
+### Typical Memory Footprint
+- **Base Application**: ~50MB
+- **Document Processing**: +10-50MB per document
+- **Vector Storage**: ~4 bytes × dimensions × chunks
+- **FAISS Index**: ~1.5x vector storage size
+
+### Example Calculation
+```
+10 documents × 20 chunks each × 1536 dimensions × 4 bytes = ~1.2
