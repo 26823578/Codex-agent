@@ -1,0 +1,51 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="personal-codex-agent",
+    version="1.0.0",
+    description="A RAG-based chatbot that answers questions about you as a candidate",
+    author="Candidate",
+    author_email="candidate@example.com",
+    packages=find_packages(),
+    python_requires=">=3.8",
+    install_requires=[
+        "streamlit>=1.20.0",
+        "openai>=1.0.0",
+        "langchain>=0.0.350",
+        "tqdm",
+        "faiss-cpu",
+        "python-dotenv",
+        "pypdf>=3.8.0",
+        "sentence-transformers",
+        "chromadb",
+        "typing_extensions",
+        "nltk",
+    ],
+    extras_require={
+        "dev": [
+            "black",
+            "flake8", 
+            "pylint",
+            "pytest",
+            "pytest-cov",
+            "jupyter",
+            "ipython",
+            "ruff",
+        ]
+    },
+    entry_points={
+        "console_scripts": [
+            "codex-agent=app:main",
+        ],
+    },
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+    ],
+)

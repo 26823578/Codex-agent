@@ -1,7 +1,8 @@
 import numpy as np
 import faiss
 from typing import List, Tuple, Dict, Any
-import openai
+from openai import OpenAI
+from tqdm import tqdm
 from src.config import Config
 from src.document_processor import TextChunk
 
@@ -12,7 +13,7 @@ class VectorStore:
         self.config = Config()
         self.index = None
         self.chunks: List[TextChunk] = []
-        self.client = openai.OpenAI(api_key=self.config.OPENAI_API_KEY)
+        self.client = OpenAI(api_key=self.config.OPENAI_API_KEY)
         
     def add_chunks(self, chunks: List[TextChunk]):
         """Add text chunks to the vector store"""
@@ -20,6 +21,7 @@ class VectorStore:
             return
         
         self.chunks = chunks
+        print(f"Generating embeddings for {len(chunks)} chunks...")
         
         # Generate embeddings for all chunks
         embeddings = self._generate_embeddings([chunk.content for chunk in chunks])
@@ -60,13 +62,13 @@ class VectorStore:
         return results
     
     def _generate_embeddings(self, texts: List[str]) -> np.ndarray:
-        """Generate embeddings using OpenAI API"""
+        """Generate embeddings using OpenAI API with progress tracking"""
         try:
             # Process in batches to avoid rate limits
             batch_size = 100
             all_embeddings = []
             
-            for i in range(0, len(texts), batch_size):
+            for i in tqdm(range(0, len(texts), batch_size), desc="Generating embeddings"):
                 batch = texts[i:i + batch_size]
                 response = self.client.embeddings.create(
                     model=self.config.EMBEDDING_MODEL,

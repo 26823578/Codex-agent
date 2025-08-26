@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 from typing import List, Dict
 from src.vector_store import VectorStore
 from src.config import Config
@@ -9,7 +9,7 @@ class ChatAgent:
     def __init__(self, vector_store: VectorStore):
         self.vector_store = vector_store
         self.config = Config()
-        self.client = openai.OpenAI(api_key=self.config.OPENAI_API_KEY)
+        self.client = OpenAI(api_key=self.config.OPENAI_API_KEY)
         
         # Mode-specific prompts
         self.mode_prompts = {

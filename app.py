@@ -41,9 +41,9 @@ def main():
         # File upload
         uploaded_files = st.file_uploader(
             "Upload your documents",
-            type=['pdf', 'docx', 'txt'],
+            type=['pdf', 'txt'],  # Removed docx since python-docx not in requirements
             accept_multiple_files=True,
-            help="Upload your CV, README files, blog posts, or any personal documents"
+            help="Upload your CV, README files, blog posts, or any personal documents (PDF, TXT)"
         )
         
         # Process documents button

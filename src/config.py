@@ -8,9 +8,9 @@ class Config:
     OPENAI_MODEL: str = "gpt-3.5-turbo"
     EMBEDDING_MODEL: str = "text-embedding-3-small"
     
-    # Chunking Configuration
-    CHUNK_SIZE: int = 450  # tokens
-    CHUNK_OVERLAP: int = 50  # tokens
+    # Chunking Configuration - using character-based for LangChain
+    CHUNK_SIZE: int = 1000  # characters for LangChain splitter
+    CHUNK_OVERLAP: int = 200  # character overlap
     
     # RAG Configuration
     TOP_K_RESULTS: int = 5
@@ -25,7 +25,7 @@ class Config:
     
     def __post_init__(self):
         if self.SUPPORTED_EXTENSIONS is None:
-            self.SUPPORTED_EXTENSIONS = ['.pdf', '.docx', '.txt', '.md']
+            self.SUPPORTED_EXTENSIONS = ['.pdf', '.txt', '.md']  # Removed .docx
     
     @classmethod
     def validate(cls):
